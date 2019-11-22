@@ -29,8 +29,6 @@ def sample(
         print(label_path)
         print(ok)
 
-        break
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
