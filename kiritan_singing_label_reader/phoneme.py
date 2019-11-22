@@ -65,6 +65,7 @@ class Phoneme:
 
 
 def filter_phoneme_with_note(phonemes: Sequence[Phoneme], notes: Sequence[Note]):
+    """filter un pairwise phoneme label"""
     pau_phoneme = Phoneme('pau')
     assert phonemes[0] == pau_phoneme and phonemes[-1] == pau_phoneme
 
