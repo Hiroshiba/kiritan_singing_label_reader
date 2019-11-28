@@ -43,7 +43,7 @@ class MidiNoteReader():
         start_states = {}
         for track in self.song:
             for event in track:
-                if isinstance(event, midi.NoteOnEvent):
+                if isinstance(event, midi.NoteOnEvent) or isinstance(event, midi.NoteOffEvent):
                     pitch = event.get_pitch()
 
                     if pitch in start_states:  # note off
@@ -55,7 +55,7 @@ class MidiNoteReader():
                         )
                         notes.append(note)
 
-                    if event.get_velocity() > 0:  # note on
+                    if isinstance(event, midi.NoteOnEvent) and event.get_velocity() > 0:  # note on
                         assert pitch not in start_states
                         start_states[pitch] = _tick_to_second(event.tick)
 
