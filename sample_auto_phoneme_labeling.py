@@ -61,6 +61,7 @@ def sample_auto_phoneme_labeling(
     notes = MidiNoteReader(midi_path).get_notes()
     assert len(lyrics) == len(notes)
 
+    # phoneme labeling
     phonemes: List[Phoneme] = []
     phonemes.append(Phoneme(name='pau', start=0, end=notes[0].start))
     for lyric, note in zip(lyrics, notes):
@@ -80,7 +81,19 @@ def sample_auto_phoneme_labeling(
         p = Phoneme(name=cell.vowel, start=note.start, end=note.end)
         phonemes.append(p)
 
+    # fill brink phoneme
+    for pre_phoneme, post_phoneme in zip(phonemes[:-1], phonemes[1:]):
+        if pre_phoneme.end < post_phoneme.start:
+            p = Phoneme(name='br', start=pre_phoneme.end, end=post_phoneme.start)
+            phonemes.append(p)
+
+    # add pause phoneme at start and end
     phonemes.append(Phoneme(name='pau', start=notes[-1].end, end=notes[-1].end + 1))
+
+    # sort
+    phonemes = sorted(phonemes, key=attrgetter('start'))
+
+    # save
     Phoneme.write_julius_list(output_path, phonemes=phonemes)
 
 
